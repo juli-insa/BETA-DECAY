@@ -30,7 +30,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("platform", "./public/assets/platform.png");
     this.load.image("square", "./public/assets/square.png");
     this.load.image("triangle", "./public/assets/triangle.png");
-    this.load.image("Ninja", "./public/assets/Ninja.png", {
+    this.load.image("beta", "./public/assets/beta.webp", {
       frameWidth: 32,
       frameHeight: 48,
     });
@@ -38,19 +38,36 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    // Crear el fondo, plataformas y jugador
-    this.add.image(400, 300, "Cielo").setScale(2);
+    const width = this.scale.width;
+    const height = this.scale.height;
 
+    // Fondo
+    this.add.image(width / 2, height / 2, "Cielo")
+      .setOrigin(0.5)
+      .setDisplaySize(width, height);
+
+    // Plataforma principal (estática)
     this.platforms = this.physics.add.staticGroup();
-    this.platforms.create(400, 568, "platform").setScale(2).refreshBody();
-    this.platforms.create(50, 350, "platform");
-    this.platforms.create(750, 220, "platform");
+    this.platforms.create(1000, 0, "platform").setScale(5).refreshBody();
 
-    this.player = this.physics.add.sprite(400, 300, "Ninja").setScale(0.1);
+    // Plataformas móviles
+    this.movingPlatforms = this.physics.add.group();
+    let p1 = this.movingPlatforms.create(50, 350, "platform");
+    let p2 = this.movingPlatforms.create(750, 220, "platform");
+    [p1, p2].forEach(platform => {
+      platform.body.allowGravity = false;
+      platform.body.immovable = true;
+    });
+
+    // Jugador
+    this.player = this.physics.add.sprite(400, 300, "beta").setScale(0.1);
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
 
+    // Colisiones
     this.physics.add.collider(this.player, this.platforms);
+    this.physics.add.collider(this.player, this.movingPlatforms);
+    this.physics.add.collider(this.movingPlatforms, this.platforms);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -60,18 +77,6 @@ export default class Game extends Phaser.Scene {
       fill: "#000",
     });
 
-    // Configurar el temporizador
-    this.timerText = this.add.text(750, 16, `Tiempo: ${this.timeLeft}`, {
-      fontSize: "32px",
-      fill: "#000",
-    }).setOrigin(1, 0);
-
-    this.timerEvent = this.time.addEvent({
-      delay: 1000,
-      callback: this.updateTimer,
-      callbackScope: this,
-      loop: true,
-    });
 
     // Temporizador para generar formas aleatorias
     this.randomShapeTimer = this.time.addEvent({
@@ -84,6 +89,21 @@ export default class Game extends Phaser.Scene {
     this.cuchilloTimer = this.time.addEvent({
       delay: 850, //  milisegundos
       callback: this.createcuchillo,
+      callbackScope: this,
+      loop: true,
+    });
+
+    // Temporizador para crear plataformas móviles aleatorias
+    this.time.addEvent({
+      delay: 1000, // cada 2 segundos (ajusta el tiempo si quieres)
+      callback: () => {
+        const x = Phaser.Math.Between(50, this.scale.width - 50);
+        const y = this.scale.height; // Aparecen abajo de la pantalla
+        const platform = this.movingPlatforms.create(x, y, "platform");
+        platform.setVelocityY(-50); // Opcional: velocidad inicial hacia arriba
+        platform.body.allowGravity = false;
+        platform.body.immovable = true;
+      },
       callbackScope: this,
       loop: true,
     });
@@ -124,49 +144,6 @@ export default class Game extends Phaser.Scene {
     this.physics.add.overlap(this.player, diamondGroup, this.collectDiamond, null, this);
   }
 
-  // Crear cuadrados
-  createSquare() {
-    const squareGroup = this.physics.add.group({
-      key: "square",
-      setScale: { x: 0.5, y: 0.5 },
-      repeat: 0,
-      setXY: { x: Phaser.Math.Between(50, 750), y: 0 },
-    });
-
-    squareGroup.children.iterate((child) => {
-      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-      child.setBounceX(1);
-      child.setVelocityX(Phaser.Math.Between(-100, 100));
-      child.setData("points", 10);
-      child.setTint(0xff9900);
-      child.setCollideWorldBounds(true); // Evitar que salga de la pantalla
-    });
-
-    this.physics.add.collider(squareGroup, this.platforms, this.handlePlatformCollision, null, this);
-    this.physics.add.overlap(this.player, squareGroup, this.collectsquare, null, this);
-  }
-
-  // Crear triángulos
-  createTriangle() {
-    const triangleGroup = this.physics.add.group({
-      key: "triangle",
-      setScale: { x: 0.5, y: 0.5 },
-      repeat: 0,
-      setXY: { x: Phaser.Math.Between(50, 750), y: 0 },
-    });
-
-    triangleGroup.children.iterate((child) => {
-      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-      child.setBounceX(1);
-      child.setVelocityX(Phaser.Math.Between(-100, 100));
-      child.setData("points", 5);
-      child.setTint(0xffff00);
-      child.setCollideWorldBounds(true); // Evitar que salga de la pantalla
-    });
-
-    this.physics.add.collider(triangleGroup, this.platforms, this.handlePlatformCollision, null, this);
-    this.physics.add.overlap(this.player, triangleGroup, this.collecttrangle, null, this);
-  }
 
   // Crear cuchillos
   createcuchillo() {
@@ -196,6 +173,62 @@ export default class Game extends Phaser.Scene {
     });
   }
 
+  // Crear cuadrados
+  createSquare() {
+    const squareGroup = this.physics.add.group({
+      key: "square",
+      setScale: { x: 0.5, y: 0.5 },
+      repeat: 0,
+      setXY: { x: Phaser.Math.Between(50, 750), y: 0 },
+    });
+
+    squareGroup.children.iterate((child) => {
+      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      child.setBounceX(1);
+      child.setVelocityX(Phaser.Math.Between(-100, 100));
+      child.setData("points", 10);
+      child.setTint(0x00ff00);
+      child.setCollideWorldBounds(true);
+    });
+
+    this.physics.add.collider(squareGroup, this.platforms, this.handlePlatformCollision, null, this);
+    this.physics.add.overlap(this.player, squareGroup, (player, square) => {
+      square.disableBody(true, true);
+      this.score += 10;
+      this.scoreText.setText(`Puntos: ${this.score}`);
+      this.figurasContador.cuadrado++;
+      console.log(this.figurasContador);
+    }, null, this);
+  }
+
+  // Crear triángulos
+  createTriangle() {
+    const triangleGroup = this.physics.add.group({
+      key: "triangle",
+      setScale: { x: 0.5, y: 0.5 },
+      repeat: 0,
+      setXY: { x: Phaser.Math.Between(50, 750), y: 0 },
+    });
+
+    triangleGroup.children.iterate((child) => {
+      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      child.setBounceX(1);
+      child.setVelocityX(Phaser.Math.Between(-100, 100));
+      child.setData("points", 12);
+      child.setTint(0x0000ff);
+      child.setCollideWorldBounds(true);
+    });
+
+    this.physics.add.collider(triangleGroup, this.platforms, this.handlePlatformCollision, null, this);
+    this.physics.add.overlap(this.player, triangleGroup, (player, triangle) => {
+      triangle.disableBody(true, true);
+      this.score += 12;
+      this.scoreText.setText(`Puntos: ${this.score}`);
+      this.figurasContador.triangle++;
+      console.log(this.figurasContador);
+    }, null, this);
+  }
+
   update() {
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-300); // Mover a la izquierda
@@ -211,6 +244,11 @@ export default class Game extends Phaser.Scene {
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330); // Saltar
     }
+    // Mover solo las plataformas móviles hacia arriba
+    this.movingPlatforms.children.iterate((platform) => {
+      platform.y -= 1; // Ajusta la velocidad aquí
+      platform.body.updateFromGameObject(); // Actualiza el cuerpo físico
+    });
   }
 
   updateTimer() {
@@ -222,15 +260,8 @@ export default class Game extends Phaser.Scene {
     }
   }
 
-  checkWinOrLose() {
-    if (this.timeLeft <= 0) {
-      if (this.score >= 100) {
-        this.scene.start("findeljuego", { result: "win", contador: this.figurasContador, puntaje: this.score });
-      } else {
-        this.scene.start("findeljuego", { result: "lose", contador: this.figurasContador, puntaje: this.score });
-      }
-    }
-  }
+
+
 
   collectDiamond(player, diamond) {
     diamond.disableBody(true, true); // Desactiva el diamante
@@ -242,25 +273,7 @@ export default class Game extends Phaser.Scene {
     console.log(this.figurasContador); // Mostrar el contador en la consola
   }
 
-  collectsquare(player, square) {
-    square.disableBody(true, true); // Desactiva el cuadrado
-    this.score += 10;
-    this.scoreText.setText(`Puntos: ${this.score}`);
 
-    // Incrementar el contador de cuadrados
-    this.figurasContador.cuadrado++;
-    console.log(this.figurasContador); // Mostrar el contador en la consola
-  }
-
-  collecttrangle(player, triangle) {
-    triangle.disableBody(true, true); // Desactiva el triángulo
-    this.score += 5;
-    this.scoreText.setText(`Puntos: ${this.score}`);
-
-    // Incrementar el contador de triángulos
-    this.figurasContador.triangle++;
-    console.log(this.figurasContador); // Mostrar el contador en la consola
-  }
 
   collectcuchillo(player, cuchillo) {
     cuchillo.disableBody(true, true); // Desactiva el cuchillo
