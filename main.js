@@ -1,8 +1,12 @@
+import pantallaprincipal from "./scenes/pantallaprincipal.js";
+
 import incio from "./scenes/incio.js";
 
 import Game from "./scenes/Game.js";
 
 import findeljuego from "./scenes/findeljuego.js";
+
+
 
 
 
@@ -26,14 +30,21 @@ const config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 200 },
+      gravity: { y: 300 },
       debug: true,
     },
   },
+
+  render: {
+    pixelArt: true, // Enable pixel art rendering
+    antialias: false, // Disable antialiasing for pixel art
+    roundPixels: true, // Ensure pixels are rendered as squares
+  },
+  
   // List of scenes to load
   // Only the first scene will be shown
   // Remember to import the scene before adding it to the list
-  scene: [incio, Game, findeljuego],
+  scene: [pantallaprincipal, incio, Game, findeljuego],
 };
 
 // Create a new Phaser game instance

@@ -2,78 +2,85 @@
 
 export default class findeljuego extends Phaser.Scene {
   constructor() {
-    // key of the scene
-    // the key will be used to start the scene by other scenes
     super("findeljuego");
   }
 
-  init() {
-    // this is called before the scene is created
-    // init variables
-    // take data passed from other scenes
-    // data object param {}
+  init(data) {
+    this.finalScore = data.score || 0; // Recibe el puntaje
   }
 
   preload() {
     // load assets
-    this.load.image("FondoMenu", "./public/assets/FondoMenu.jpg");
+    this.load.image("Cielo", "./public/assets/Cielo.PNG");
   }
 
-  create(data) {
+  create() {
     const width = this.scale.width;
     const height = this.scale.height;
 
     // Fondo de la escena
-    this.add.image(width / 2, height / 2, "FondoMenu")
+    this.add.image(width / 2, height / 2, "Cielo")
       .setOrigin(0.5)
       .setDisplaySize(width, height);
 
-    // Mostrar el resultado
-    const result = data.result === "win" ? "¡Ganaste!" : "Perdiste";
-    this.add.text(width / 2, height / 2 - 150, result, {
-      fontFamily: "PixelFont",
-      fontSize: "64px",
-      fill: "#000000",
-    }).setOrigin(0.5);
+    // Obtener el puntaje más alto guardado
+    const highScore = parseInt(localStorage.getItem('highScore')) || 0;
+
+    // Si el puntaje actual es mayor, actualizar el high score
+    if (this.finalScore > highScore) {
+      localStorage.setItem('highScore', this.finalScore);
+    }
 
     // Mostrar el puntaje final
-    this.add.text(width / 2, height / 2 - 50, `Puntaje final: ${data.puntaje}`, {
-      fontFamily: "PixelFont",
-      fontSize: "32px",
-      fill: "#000000",
+    this.add.text(width / 2, height / 2 - 50, `Puntaje final: ${this.finalScore}`, {
+      fontSize: '60px',
+      fill: '#fff',
+      fontStyle: 'bold',
+      fontFamily: 'Arial Black'
     }).setOrigin(0.5);
 
-    // Mostrar el contador de figuras
-    const contadorText = `
-    Diamantes: ${data.contador.diamond}
-    Cuadrados: ${data.contador.cuadrado}
-    Triángulos: ${data.contador.triangle}
-  `;
-    this.add.text(width / 2, height / 2 + 50, contadorText, {
-      fontSize: "24px",
-      fill: "#000000",
+    // Mostrar el puntaje más alto
+    this.add.text(width / 2, height / 2 + 50, `Record: ${Math.max(this.finalScore, highScore)}`, {
+      fontSize: '60px',
+      fill: '#00cfff',
+      fontStyle: 'bold',
+      fontFamily: 'Arial Black'
     }).setOrigin(0.5);
 
-    // Instrucción para reiniciar
-    this.add.text(width / 2, height / 2 + 200, "Presiona R para reiniciar", {
-      fontFamily: "PixelFont",
-      fontSize: "32px",
-      fill: "#000000",
-    }).setOrigin(0.5);
+//     // Instrucción para reiniciar
+//     this.add.text(width / 2, height / 2 + 200, "Presiona ENTER para reiniciar", {
+//       fontSize: '60px',
+//       fill: '#fff',
+//       fontStyle: 'bold',
+//       fontFamily: 'Arial Black'
+//     }).setOrigin(0.5);
 
-    // Reiniciar el juego al presionar "R"
-    this.input.keyboard.once("keydown-R", () => {
+//     // Reiniciar el juego al presionar "ENTER"
+//     this.input.keyboard.once("keydown-ENTER", () => {
+//       this.scene.start("Game");
+//     });
+//   }
+
+//   update() {
+//     // This method is called every frame
+//     // You can add game logic here, like checking for input or updating game objects
+//   }
+// }
+  // Botón de Play (texto interactivo)
+    const playButton = this.add.text(width / 2, height / 2 + 450, "▶ VOLVER A JUGAR", {
+      fontSize: '80px',
+      fill: '#00cfff',
+      fontStyle: 'bold',
+      fontFamily: 'Arial Black'
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+
+    // Cambia de escena al hacer clic
+    playButton.on('pointerdown', () => {
       this.scene.start("Game");
     });
-  }
 
-  checkWinOrLose() {
-    if (this.timeLeft <= 0) {
-      if (this.score >= 100) {
-        this.scene.start("findeljuego", { result: "win", contador: this.figurasContador, puntaje: this.score });
-      } else {
-        this.scene.start("findeljuego", { result: "lose", contador: this.figurasContador, puntaje: this.score });
-      }
-    }
+    // Opcional: efecto hover
+    playButton.on('pointerover', () => playButton.setStyle({ fill: '#fff' }));
+    playButton.on('pointerout', () => playButton.setStyle({ fill: '#00cfff' }));
   }
 }

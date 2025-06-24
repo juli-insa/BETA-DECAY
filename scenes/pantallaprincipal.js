@@ -1,10 +1,10 @@
 // URL to explain PHASER scene: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/scene/
 
-export default class incio extends Phaser.Scene {
+export default class pantallaprincipal extends Phaser.Scene {
   constructor() {
     // key of the scene
     // the key will be used to start the scene by other scenes
-    super("incio");
+    super("pantallaprincipal");
   }
 
   init() {
@@ -17,10 +17,8 @@ export default class incio extends Phaser.Scene {
   preload() {
     // load assets
     this.load.image("Cielo", "./public/assets/Cielo.PNG");
-    this.load.image("FLECHAS", "./public/assets/FLECHAS.png");
-    this.load.image("SPACE", "./public/assets/SPACE.png");
-    this.load.image("LOGO", "./public/assets/LOGO.png");
-  
+    this.load.image("beta2", "./public/assets/beta2.png");
+     this.load.image("LOGO", "./public/assets/LOGO.png");
   }
   create() {
     const width = this.scale.width;
@@ -31,14 +29,19 @@ export default class incio extends Phaser.Scene {
       .setOrigin(0.5)
       .setDisplaySize(width, height);
 
-    // Logo del juego
-    this.add.image(width / 2, height / 2 - 350, "LOGO")
+    this.add.image(width / 2, height / 2 - 100, "beta2") 
       .setOrigin(0.5)
-      .setDisplaySize(width / 2, height / 3);
+      .setScale(0.5); // Cambia 0.5 por el factor de escala que desees
+
+
+      // Logo del juego
+    this.add.image(width / 2, height / 2 - -200, "LOGO")
+      .setOrigin(0.5)
+      .setDisplaySize(width / 2 , height / 3);
 
     // // Título del juego con mejor tipografía y color
-    // const title = this.add.text(width / 2, height / 2 - 250, "BETA DECAY", {
-    //   fontSize: "64px",
+    // const title = this.add.text(width / 2, height / 2 - -100, "BETA DECAY", {
+    //   fontSize: "80px",
     //   fill: "#00cfff",// color del texto
     //   stroke: "#505050", // Contorno gris
     //   strokeThickness: 6, // Grosor del contorno
@@ -52,38 +55,6 @@ export default class incio extends Phaser.Scene {
     //   },
     // }).setOrigin(0.5);
 
-    this.add.text(width / 2, height / 2 - 50, "¡Escapa de la red y elimina los plasticos!", {
-      fontSize: '60px',
-      fill: '#00cfff',
-      fontStyle: 'bold', // Hace la letra más gruesa
-      fontFamily: 'Arial Black' // O prueba con otra fuente ancha
-    }).setOrigin(0.5);
-
-
-    // Imagen de las flechas con tinte blanco
-    this.add.text(width / 2, height / 2 + 100, "Controles", {
-       fontSize: '60px',
-      fill: '#000',
-      fontStyle: 'bold', // Hace la letra más gruesa
-      fontFamily: 'Arial Black' // O prueba con otra fuente ancha
-    }).setOrigin(0.5);
-
-
-    // Centra ambas imágenes en la misma línea horizontal
-    const yControles = height / 2 + 300;
-    const espacio = width / 8; // Separación entre imágenes
-
-    // Imagen de la barra espaciadora (a la izquierda)
-    this.add.image(width / 2 - espacio, yControles, "SPACE")
-      .setOrigin(0.5)
-      .setDisplaySize(width / 4, height / 6);
-
-    // Imagen de las flechas (a la derecha)
-    this.add.image(width / 2 + espacio, yControles, "FLECHAS")
-      .setOrigin(0.5)
-      .setDisplaySize(width / 6, height / 4)
-      .setTint(0x00cfff);
-
 
     // // Instrucciones para jugar
     // this.add.text(width / 2, height / 2 + 500, "Presiona ENTER para iniciar", {
@@ -93,7 +64,12 @@ export default class incio extends Phaser.Scene {
     //   fontFamily: 'Arial Black' // O prueba con otra fuente ancha
     // }).setOrigin(0.5);
 
-     // Botón de Play (texto interactivo)
+    // // Iniciar el juego al presionar "ENTER"
+    // this.input.keyboard.once("keydown-ENTER", () => {
+    //   this.scene.start("incio"); // Cambia a la escena de inicio
+    // });
+
+    // Botón de Play (texto interactivo)
     const playButton = this.add.text(width / 2, height / 2 + 450, "▶ JUGAR", {
       fontSize: '80px',
       fill: '#00cfff',
@@ -103,7 +79,7 @@ export default class incio extends Phaser.Scene {
 
     // Cambia de escena al hacer clic
     playButton.on('pointerdown', () => {
-      this.scene.start("Game");
+      this.scene.start("incio");
     });
 
     // Opcional: efecto hover
@@ -111,11 +87,3 @@ export default class incio extends Phaser.Scene {
     playButton.on('pointerout', () => playButton.setStyle({ fill: '#00cfff' }));
   }
 }
-
-
-//     // Iniciar el juego al presionar "ENTER"
-//     this.input.keyboard.once("keydown-ENTER", () => {
-//       this.scene.start("Game");
-//     });
-//   }
-// }
