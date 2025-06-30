@@ -31,7 +31,7 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: 300 },
-      debug: true,
+      debug: false, // Set to true if you want to see physics debug information
     },
   },
 
