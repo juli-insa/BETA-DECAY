@@ -129,8 +129,8 @@ this.time.addEvent({
     this.cursors = this.input.keyboard.createCursorKeys();
 
     // Configurar el puntaje
-    this.scoreText = this.add.text(2, 2, '0', {
-      fontSize: '60px',
+    this.scoreText = this.add.text(5, 5, '0', {
+      fontSize: '90px',
       fill: '#fff',
       fontStyle: 'bold', // Hace la letra más gruesa
       fontFamily: 'Arial Black' // O prueba con otra fuente ancha
@@ -138,14 +138,14 @@ this.time.addEvent({
 
  this.vidas = 3; // O 5 si usas 5 corazones
     this.corazones = [];
-    const corazonMargin = 35;
-    const corazonSpacing = 100;
+    const corazonMargin = 55;
+    const corazonSpacing = 200;
     for (let i = 0; i < this.vidas; i++) {
       const corazon = this.add.image(
         this.scale.width - corazonMargin - i * corazonSpacing,
         corazonMargin + 5,
         "corazon"
-      ).setOrigin(0.5).setScale(2);
+      ).setOrigin(0.5).setScale(3);
       this.corazones.push(corazon);
     }
 
@@ -376,7 +376,7 @@ perderVida(player, diamante) {
 
     const fx = this.add.sprite(x, y, 'perdervidas')
       .setOrigin(0.5)
-      .setScale(2)
+      .setScale(3)
       .play('perdervidas_anim');
 
     this.time.delayedCall(1000, () => fx.destroy());
