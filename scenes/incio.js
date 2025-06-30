@@ -16,7 +16,7 @@ export default class incio extends Phaser.Scene {
 
   preload() {
     // load assets
-    this.load.image("Cielo", "./public/assets/Cielo.PNG");
+    this.load.image("Cielo", "./public/assets/Cielo2.png");
     this.load.image("FLECHAS", "./public/assets/FLECHAS.png");
     this.load.image("SPACE", "./public/assets/SPACE.png");
     this.load.image("LOGO", "./public/assets/LOGO.png");
@@ -31,28 +31,13 @@ export default class incio extends Phaser.Scene {
       .setOrigin(0.5)
       .setDisplaySize(width, height);
 
-    // Logo del juego
-    this.add.image(width / 2, height / 2 - 350, "LOGO")
-      .setOrigin(0.5)
-      .setDisplaySize(width / 2, height / 3);
+    // // Logo del juego
+    // this.add.image(width / 2, height / 2 - 350, "LOGO")
+    //   .setOrigin(0.5)
+    //   .setDisplaySize(width / 2, height / 3);
 
-    // // Título del juego con mejor tipografía y color
-    // const title = this.add.text(width / 2, height / 2 - 250, "BETA DECAY", {
-    //   fontSize: "64px",
-    //   fill: "#00cfff",// color del texto
-    //   stroke: "#505050", // Contorno gris
-    //   strokeThickness: 6, // Grosor del contorno
-    //   shadow: {
-    //     offsetX: 4, // Sombra en el eje X
-    //     offsetY: 4, // Sombra en el eje Y
-    //     color: "#303030", // Color de la sombra
-    //     blur: 2, // Desenfoque de la sombra
-    //     stroke: true, // Aplicar sombra al contorno
-    //     fill: true, // Aplicar sombra al relleno
-    //   },
-    // }).setOrigin(0.5);
 
-    this.add.text(width / 2, height / 2 - 50, "¡Escapa de la red y elimina los plasticos!", {
+    this.add.text(width / 2, height / 2 - 300, "¡Escapa de la red y elimina la basura!", {
       fontSize: '60px',
       fill: '#00cfff',
       fontStyle: 'bold', // Hace la letra más gruesa
@@ -61,7 +46,7 @@ export default class incio extends Phaser.Scene {
 
 
     // Imagen de las flechas con tinte blanco
-    this.add.text(width / 2, height / 2 + 100, "Controles", {
+    this.add.text(width / 2, height / 2 - 50, "Controles", {
        fontSize: '60px',
       fill: '#000',
       fontStyle: 'bold', // Hace la letra más gruesa
@@ -70,7 +55,7 @@ export default class incio extends Phaser.Scene {
 
 
     // Centra ambas imágenes en la misma línea horizontal
-    const yControles = height / 2 + 300;
+    const yControles = height / 2 + 200;
     const espacio = width / 8; // Separación entre imágenes
 
     // Imagen de la barra espaciadora (a la izquierda)
@@ -84,14 +69,6 @@ export default class incio extends Phaser.Scene {
       .setDisplaySize(width / 6, height / 4)
       .setTint(0x00cfff);
 
-
-    // // Instrucciones para jugar
-    // this.add.text(width / 2, height / 2 + 500, "Presiona ENTER para iniciar", {
-    //   fontSize: '60px',
-    //   fill: '#00cfff',
-    //   fontStyle: 'bold', // Hace la letra más gruesa
-    //   fontFamily: 'Arial Black' // O prueba con otra fuente ancha
-    // }).setOrigin(0.5);
 
      // Botón de Play (texto interactivo)
     const playButton = this.add.text(width / 2, height / 2 + 450, "▶ JUGAR", {
@@ -111,11 +88,3 @@ export default class incio extends Phaser.Scene {
     playButton.on('pointerout', () => playButton.setStyle({ fill: '#00cfff' }));
   }
 }
-
-
-//     // Iniciar el juego al presionar "ENTER"
-//     this.input.keyboard.once("keydown-ENTER", () => {
-//       this.scene.start("Game");
-//     });
-//   }
-// }

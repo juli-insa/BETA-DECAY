@@ -11,7 +11,7 @@ export default class findeljuego extends Phaser.Scene {
 
   preload() {
     // load assets
-    this.load.image("Cielo", "./public/assets/Cielo.PNG");
+    this.load.image("Cielo", "./public/assets/Cielo2.png");
   }
 
   create() {
@@ -47,25 +47,6 @@ export default class findeljuego extends Phaser.Scene {
       fontFamily: 'Arial Black'
     }).setOrigin(0.5);
 
-//     // Instrucción para reiniciar
-//     this.add.text(width / 2, height / 2 + 200, "Presiona ENTER para reiniciar", {
-//       fontSize: '60px',
-//       fill: '#fff',
-//       fontStyle: 'bold',
-//       fontFamily: 'Arial Black'
-//     }).setOrigin(0.5);
-
-//     // Reiniciar el juego al presionar "ENTER"
-//     this.input.keyboard.once("keydown-ENTER", () => {
-//       this.scene.start("Game");
-//     });
-//   }
-
-//   update() {
-//     // This method is called every frame
-//     // You can add game logic here, like checking for input or updating game objects
-//   }
-// }
   // Botón de Play (texto interactivo)
     const playButton = this.add.text(width / 2, height / 2 + 450, "▶ VOLVER A JUGAR", {
       fontSize: '80px',
