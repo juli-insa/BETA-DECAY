@@ -62,6 +62,10 @@ export default class Game extends Phaser.Scene {
    *  CREATE
    *  ----------------------------------------------------------------*/
   create() {
+    // Reiniciar progreso de fases al reiniciar la escena
+    this.stage = 0;
+    this.spawned = 0;
+
     /* ★★★ 1. ESCENA BÁSICA ★★★ */
     this.add.image(this.scale.width / 2, this.scale.height / 2, "Cielo")
         .setOrigin(0.5).setDisplaySize(this.scale.width, this.scale.height);
