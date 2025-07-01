@@ -12,7 +12,11 @@ export default class findeljuego extends Phaser.Scene {
   preload() {
     // load assets
     this.load.image("Cielo", "./public/assets/Cielo2.png");
-  }
+     this.load.spritesheet("play", "./public/assets/play.png", {
+      frameWidth: 360,
+      frameHeight: 360
+     });
+    }
 
   create() {
     const width = this.scale.width;
@@ -47,21 +51,36 @@ export default class findeljuego extends Phaser.Scene {
       fontFamily: 'Arial Black'
     }).setOrigin(0.5);
 
-  // Botón de Play (texto interactivo)
-    const playButton = this.add.text(width / 2, height / 2 + 450, "▶ VOLVER A JUGAR", {
-      fontSize: '80px',
-      fill: '#00cfff',
-      fontStyle: 'bold',
-      fontFamily: 'Arial Black'
-    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+ 
+ this.anims.create({
+  key: 'playAnim',
+  frames: this.anims.generateFrameNumbers('play', { start: 4, end: 1 }),
+  frameRate: 10,
+  repeat: 0 // no repetir la animación
+});
+   
+  // Botón de Play
+const playButton = this.add.sprite(width / 2, height / 2 + 400, 'play')
+  .setOrigin(0.5)
+  .setInteractive({ useHandCursor: true });
 
-    // Cambia de escena al hacer clic
-    playButton.on('pointerdown', () => {
-      this.scene.start("Game");
-    });
+// Al hacer clic, se reproduce la animación y luego cambia de escena
+playButton.on('pointerdown', () => {
+  playButton.play('playAnim');
 
-    // Opcional: efecto hover
-    playButton.on('pointerover', () => playButton.setStyle({ fill: '#fff' }));
-    playButton.on('pointerout', () => playButton.setStyle({ fill: '#00cfff' }));
+  // Esperar a que termine la animación
+  playButton.once('animationcomplete', () => {
+    this.scene.start("Game");
+  });
+});
+}
+
+
+  update() {
+    // update logic
+    // this is called every frame
   }
+
+  // other methods
+  // for example, to create animations, groups, etc.
 }

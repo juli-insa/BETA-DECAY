@@ -17,11 +17,14 @@ export default class pantallaprincipal extends Phaser.Scene {
   preload() {
     // load assets
     this.load.image("Cielo", "./public/assets/Cielo2.png");
-    this.load.image("beta2", "./public/assets/beta2.png");
      this.load.image("LOGO", "./public/assets/LOGO.png");
      this.load.spritesheet("LOGOANIM", "./public/assets/LOGOANIM.png", {
       frameWidth: 384,
       frameHeight: 216
+     });
+     this.load.spritesheet("play", "./public/assets/play.png", {
+      frameWidth: 360,
+      frameHeight: 360
      });
     }
   create() {
@@ -45,27 +48,40 @@ export default class pantallaprincipal extends Phaser.Scene {
 
    const logoSprite = this.add.sprite(width / 2, height / 2 - 200, 'LOGOANIM')
   .setOrigin(0.5)
-  .setScale(5); // Ajusta el tamaño del logo
+  .setScale(4,5); // Ajusta el tamaño del logo
 
     // Inicia la animación del logo
    logoSprite.play('logoAnim', true);
     
+   this.anims.create({
+  key: 'playAnim',
+  frames: this.anims.generateFrameNumbers('play', { start: 0, end: 3 }),
+  frameRate: 10,
+  repeat: 0 // no repetir la animación
+});
+   
+  // Botón de Play
+const playButton = this.add.sprite(width / 2, height / 2 + 400, 'play')
+  .setOrigin(0.5)
+  .setInteractive({ useHandCursor: true });
 
-    // Botón de Play (texto interactivo)
-    const playButton = this.add.text(width / 2, height / 2 + 450, "▶", {
-      fontSize: '80px',
-      fill: '#00cfff',
-      fontStyle: 'bold',
-      fontFamily: 'Arial Black'
-    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+// Al hacer clic, se reproduce la animación y luego cambia de escena
+playButton.on('pointerdown', () => {
+  playButton.play('playAnim');
 
-    // Cambia de escena al hacer clic
-    playButton.on('pointerdown', () => {
-      this.scene.start("incio");
-    });
+  // Esperar a que termine la animación
+  playButton.once('animationcomplete', () => {
+    this.scene.start("incio");
+  });
+});
+}
 
-    // Opcional: efecto hover
-    playButton.on('pointerover', () => playButton.setStyle({ fill: '#fff' }));
-    playButton.on('pointerout', () => playButton.setStyle({ fill: '#00cfff' }));
+
+  update() {
+    // update logic
+    // this is called every frame
   }
+
+  // other methods
+  // for example, to create animations, groups, etc.
 }
