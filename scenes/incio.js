@@ -24,6 +24,7 @@ export default class incio extends Phaser.Scene {
       frameWidth: 360,
       frameHeight: 360
      });
+      this.load.audio("burbuja", "./public/assets/burbujavidaexplota.mp3");
     }
   
   create() {
@@ -84,6 +85,7 @@ export default class incio extends Phaser.Scene {
 const playButton = this.add.sprite(width / 2, height / 2 + 400, 'play')
   .setOrigin(0.5)
   .setInteractive({ useHandCursor: true });
+   this.sonidoburbuja = this.sound.add("burbuja");
 
 // Al hacer clic, se reproduce la animación y luego cambia de escena
 playButton.on('pointerdown', () => {
@@ -98,7 +100,7 @@ playButton.on('pointerdown', () => {
 
 
   update() {
-    // update logic
+    if (this.sonidoburbuja) this.sonidoburbuja.play();// update logic
     // this is called every frame
   }
 

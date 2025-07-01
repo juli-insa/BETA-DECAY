@@ -16,16 +16,21 @@ export default class findeljuego extends Phaser.Scene {
       frameWidth: 360,
       frameHeight: 360
      });
+     this.load.audio("burbuja", "./public/assets/burbujavidaexplota.mp3");
+     this.load.audio("sonidopuntos", "./public/assets/puntosfinales.mp3");
     }
 
   create() {
     const width = this.scale.width;
     const height = this.scale.height;
+   this.sonidopunto = this.sound.add("sonidopuntos");
+   this.sonidopunto.play(); // ← Reproduce el sonido al iniciar la escena
 
     // Fondo de la escena
     this.add.image(width / 2, height / 2, "Cielo")
       .setOrigin(0.5)
       .setDisplaySize(width, height);
+     
 
     // Obtener el puntaje más alto guardado
     const highScore = parseInt(localStorage.getItem('highScore')) || 0;
@@ -34,7 +39,7 @@ export default class findeljuego extends Phaser.Scene {
     if (this.finalScore > highScore) {
       localStorage.setItem('highScore', this.finalScore);
     }
-
+    
     // Mostrar el puntaje final
     this.add.text(width / 2, height / 2 - 50, `Puntaje final: ${this.finalScore}`, {
       fontSize: '60px',
@@ -42,6 +47,7 @@ export default class findeljuego extends Phaser.Scene {
       fontStyle: 'bold',
       fontFamily: 'Arial Black'
     }).setOrigin(0.5);
+   
 
     // Mostrar el puntaje más alto
     this.add.text(width / 2, height / 2 + 50, `Record: ${Math.max(this.finalScore, highScore)}`, {
@@ -63,6 +69,7 @@ export default class findeljuego extends Phaser.Scene {
 const playButton = this.add.sprite(width / 2, height / 2 + 400, 'play')
   .setOrigin(0.5)
   .setInteractive({ useHandCursor: true });
+   this.sonidoburbuja = this.sound.add("burbuja");
 
 // Al hacer clic, se reproduce la animación y luego cambia de escena
 playButton.on('pointerdown', () => {
@@ -77,6 +84,7 @@ playButton.on('pointerdown', () => {
 
 
   update() {
+    if (this.sonidoburbuja) this.sonidoburbuja.play(); 
     // update logic
     // this is called every frame
   }

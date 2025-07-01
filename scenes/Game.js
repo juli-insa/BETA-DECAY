@@ -52,6 +52,10 @@ export default class Game extends Phaser.Scene {
       frameWidth: 160,
       frameHeight: 14
     });
+
+    this.load.audio("sonidoDisparo", "./public/assets/disparo.mp3");
+    this.load.audio("burbuja", "./public/assets/burbujavidaexplota.mp3");
+
   }
 
   /* ------------------------------------------------------------------
@@ -89,7 +93,8 @@ export default class Game extends Phaser.Scene {
     /* ★★★ 5. CONTROLES ★★★ */
     this.cursors = this.input.keyboard.createCursorKeys();
     this.input.keyboard.on("keydown-SPACE", this._shoot, this);
-
+     this.sonidoDisparo = this.sound.add("sonidoDisparo");
+  // ...existing code...
     /* ★★★ 6. PHYSICS COLLIDERS ★★★ */
     // Jugador vs red bar = Game Over
     this.physics.add.collider(this.player, this.red, this.gameOver, null, this);
@@ -199,6 +204,7 @@ export default class Game extends Phaser.Scene {
   _shoot() {
     const bala = this.bullets.create(this.player.x, this.player.y, "bullet");
     bala.setVelocityY(400).body.allowGravity = false;
+    if (this.sonidoDisparo) this.sonidoDisparo.play();
   }
 
   convertirEnDiamante(bullet, plastico) {
@@ -243,6 +249,7 @@ export default class Game extends Phaser.Scene {
       const x = this.scale.width - margin - i * spacing;
       const y = margin + 5;
       this.corazones.push(this.add.image(x, y, "corazon").setScale(3).setOrigin(0.5));
+      
     }
   }
 
@@ -262,8 +269,9 @@ export default class Game extends Phaser.Scene {
       corazon.destroy();
       const fx = this.add.sprite(x, y, "perdervidas").setScale(3).play("perdervidas_anim");
       this.time.delayedCall(1000, () => fx.destroy());
+      this.sonidoburbuja = this.sound.add("burbuja");
     }
-
+    if (this.sonidoburbuja) this.sonidoburbuja.play();
     if (this.vidas === 0) this.gameOver();
   }
 
