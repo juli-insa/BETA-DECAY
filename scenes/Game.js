@@ -158,7 +158,14 @@ export default class Game extends Phaser.Scene {
    *  UPDATE LOOP
    *  ----------------------------------------------------------------*/
   update() {
-    if (!this.juegoActivo) return; // Detiene la lógica hasta que termine el 3-2-1
+    if (!this.juegoActivo) {
+      // Mantener player completamente quieto y con animación "down"
+      if (this.player) {
+        this.player.setVelocity(0, 0);
+        this.player.anims.play("beta_down", true);
+      }
+      return;
+    }
 
     const { left, right, up } = this.cursors;
     if (left.isDown)  { this.player.setVelocityX(-1000).anims.play("beta_left", true); }
@@ -194,7 +201,13 @@ export default class Game extends Phaser.Scene {
   }
 
   _crearPlastico(cfg) {
-    const x = Phaser.Math.Between(50, this.scale.width - 50);
+    // Obtener ancho real del sprite (frame) y aplicar escala
+    const frame = this.textures.get(cfg.key).getSourceImage();
+    const spriteWidth = frame.width * cfg.scale;
+    const minX = spriteWidth / 2;
+    const maxX = this.scale.width - spriteWidth / 2;
+
+    const x = Phaser.Math.Between(minX, maxX);
     const y = this.scale.height + 50;
     const p = cfg.group.create(x, y, cfg.key)
       .setVelocityY(cfg.speed)
