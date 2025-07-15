@@ -1,18 +1,17 @@
-# Phaser 3 Template
+BETA DECAY
 
-Plantilla para iniciar nuevos proyectos con PHASER 3.
+//Sinopsis
+Es un videojuego de acción y disparos 2D donde en las profundidades del océano, un robot con forma de pez diablo ha sido activado con una única misión: limpiar el mar de basura antes de que el ecosistema colapse. Armado con un cañón láser y habilidades de navegación, el jugador debe escapar de las redes de pesca y disparar o esquivar restos de basura para eliminarlos. 
 
-Contiene configuración inicial y buenas prácticas de estructuras de carpetas.
+//Controles
+Moverse: Flechas izquierda y derecha.
+Disparar: Tecla espacio.
 
-## Cuando lo utilices
+//Link al proyecto
+https://juli-insa.github.io/BETA-DECAY/
 
-No te olvides de customizarlo a tus necesidades.
+//Motor 
+Phaser.
 
-1. Cuando lo utilices como Template desde el botón de GitHub, no olvides cambiar el nombre del repositorio acorde a tu proyecto en el wizard de creación de repositorios.
-1. Luego de clonar el repositorio en tu maquina local. Deberias:
-   1. Actualizar la version de Phaser a la version más actualizada en el archivo `index.html`. Ver la web: https://phaser.io/download/stable
-   1. También, dentro del `index.html` modificar el titulo de la pagina. Por ejemplo: `<title>My Game</title>`
-   1. Ejecutar el proyecto de forma local para ver que este funcionando correctamente. Si no es asi, deberias lograr que corra.
-   1. Una vez que este funcionando correctamente, hacer un commit con el mensaje "Update Phaser version and title".
-   1. Borrar los archivos dentro de la carpeta `/assets` y empezar a desarrollar.
-1. Por ultimo, una buena practica es: modificar este README.md, poner información relevante de tu juego, imagenes, videos, etc, y luego hacer un commit con el mensaje "Customize README.md".
+//Desarrolladora 
+Julieta Insaurralde.
