@@ -12,7 +12,7 @@ export default class findeljuego extends Phaser.Scene {
   preload() {
     // load assets
     this.load.image("Cielo", "./public/assets/Cielo2.png");
-     this.load.spritesheet("play", "./public/assets/play.png", {
+     this.load.spritesheet("replay", "./public/assets/play2.png", {
       frameWidth: 360,
       frameHeight: 360
      });
@@ -60,13 +60,13 @@ export default class findeljuego extends Phaser.Scene {
  
  this.anims.create({
   key: 'playAnim',
-  frames: this.anims.generateFrameNumbers('play', { start: 4, end: 1 }),
+  frames: this.anims.generateFrameNumbers('replay', { start: 0, end: 3 }),
   frameRate: 10,
   repeat: 0 // no repetir la animación
 });
    
   // Botón de Play
-const playButton = this.add.sprite(width / 2, height / 2 + 400, 'play')
+const playButton = this.add.sprite(width / 2, height / 2 + 400, 'replay')
   .setOrigin(0.5)
   .setInteractive({ useHandCursor: true });
    this.sonidoburbuja = this.sound.add("burbuja");
